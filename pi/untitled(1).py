@@ -116,16 +116,17 @@ def draw_lines(img,mid_x,mid_y):
     hsv =cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
     #cv2.imshow("hsv",hsv)
     #cv2.waitKey()
-    low_yellow = np.array([0,80,129])
-    up_yellow = np.array([180,255,240])
+    low_yellow = np.array([119,45,0])
+    up_yellow = np.array([180,110,217])
     mask = cv2.inRange(hsv,low_yellow,up_yellow)
-    #cv2.imshow("mask",mask)
-    
+    kernel = np.ones((6,6),np.uint8)
+    mask = cv2.erode(mask,kernel)
+    cv2.imshow("mask1",mask)
     #cv2.waitKey()
     edges = cv2.Canny(mask,threshold1=200,threshold2=300)
-    #cv2.imshow("edges",edges)
+    cv2.imshow("edges",edges)
     #cv2.waitKey()
-    lines = cv2.HoughLinesP(edges,1,np.pi/180,50,maxLineGap=50)
+    lines = cv2.HoughLinesP(edges,1,np.pi/180,20,maxLineGap=50)
     #cv2.imshow("lines",lines)
     #cv2.waitKey()
     img = cv2.circle(img,(mid_x,mid_y),10,(0,0,0),-1) #draws circle in the middle(used to steer)
@@ -174,14 +175,16 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     # and occupied/unoccupied text
     image = frame.array
     #---------------------------------SHAPE-----------------------------------------------
-    image,mask = hsv_color_space(image)
+    
     #---------------------------------LINES--------------------------
     #image = draw_lines(image,scrn_x,scrn_y)
     vertices = region_of_interest(640,480) # create roi skeleton
     cropped = ROI_mask(image,np.array([vertices],np.int32),) #create cropped image usiing roi
-    image = draw_lines(cropped,scrn_x,scrn_y) #draw lines on cropped image and pass as new image to display
+    cropped = draw_lines(cropped,scrn_x,scrn_y) #draw lines on cropped image and pass as new image to display
     
-    cv2.imshow("Frame", image)
+    
+    image,mask = hsv_color_space(image) # shape
+    cv2.imshow("Frame", cropped)
     cv2.imshow("Mask",mask)
     key = cv2.waitKey(1)&0xFF
     # clear the stream in preparation for the next frame
