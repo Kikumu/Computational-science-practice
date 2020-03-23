@@ -56,6 +56,8 @@ else if(v3 > 2.5){
   //drive_speed(0, 45);                        // Turn 26 tps for 1 s
    drive_speed(0, 15);
   pause(1000);
+  
+  //---------------remaining code is to turn 90 so that it can keep 'one hand on wall'
 }    
 drive_getTicks(&distLeft[1], &distRight[1]);
 print("distLeft[1] = %d, distRight[1] = %d\n", distLeft[1], distRight[1]);
