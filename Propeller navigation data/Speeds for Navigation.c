@@ -12,12 +12,17 @@
 #include "abdrive.h"                          // abdrive library
 #include "adcDCpropab.h" 
 
+
+
+
+int distLeft[4], distRight[4];
 int main()                   
 {
 adc_init(21, 20, 19, 18); 
 int var = 5;
 float v1,v2,v3,v0;
-
+drive_getTicks(&distLeft[0], &distRight[0]);
+print("distLeft[0] = %d, distRight[0] = %d\n", distLeft[0], distRight[0]);
 //--------------------------------------loop-----------------------------------------------//
  while (var < 7){
 v3 = adc_volts(3);  //left
@@ -50,6 +55,7 @@ else if(v3 > 2.5){
   drive_speed(0, 45);                        // Turn 26 tps for 1 s
   pause(1000);
 }    
-
+drive_getTicks(&distLeft[1], &distRight[1]);
+print("distLeft[1] = %d, distRight[1] = %d\n", distLeft[1], distRight[1]);
  }    
 }
