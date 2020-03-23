@@ -44,15 +44,17 @@ else if(v1 > 2.5){
   drive_speed(0, -45); 
   }
  else if(v2 > 2.5){
-   //turns right
+   //turns right at 90
   drive_speed(0, 0);
-  drive_speed(45, 0);                        // Turn 26 tps for 1 s
+  //drive_speed(45, 0);                        // Turn 26 tps for 1 s
+   drive_speed(15, 0);
   pause(1000);
  } 
 else if(v3 > 2.5){
-  //turns left
+  //turns left at 90
   drive_speed(0, 0);
-  drive_speed(0, 45);                        // Turn 26 tps for 1 s
+  //drive_speed(0, 45);                        // Turn 26 tps for 1 s
+   drive_speed(0, 15);
   pause(1000);
 }    
 drive_getTicks(&distLeft[1], &distRight[1]);
