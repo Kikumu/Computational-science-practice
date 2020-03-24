@@ -6,7 +6,12 @@ import numpy as np
 from picamera.array import PiRGBArray
 import RPi.GPIO as GPIO
 
+
 GPIO.setmode(GPIO.BCM) #easiest numbering 1,2,3,4...    
+GPIO.setup(16,GPIO.OUT) #adjust left
+GPIO.setup(20,GPIO.OUT) #adjust right
+GPIO.setup(26,GPIO.OUT) #forward
+
 
 #line midpoint
 def acquire_midpoint(var1,var2,var3,var4):
@@ -73,60 +78,78 @@ def draw_lines(img,mid_x,mid_y):
     hsv =cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
     #cv2.imshow("hsv",hsv)
     #cv2.waitKey()
-    low_yellow = np.array([142,89,180])
-    up_yellow = np.array([177,111,229])
+    low_yellow = np.array([148,88,0])
+    up_yellow = np.array([163,119,225])
     mask = cv2.inRange(hsv,low_yellow,up_yellow)
     kernel = np.ones((10,10),np.uint8)
     mask = cv2.erode(mask,kernel)
     cv2.imshow("mask1",mask)
     #cv2.waitKey()
     edges = cv2.Canny(mask,threshold1=200,threshold2=300)
-    cv2.imshow("edges",edges)
+    #cv2.imshow("edges",edges)
     #cv2.waitKey()
     lines = cv2.HoughLinesP(edges,1,np.pi/180,20,maxLineGap=50)
     #cv2.imshow("lines",lines)
     #cv2.waitKey()
     img = cv2.circle(img,(mid_x,mid_y),10,(0,0,0),-1) #draws circle in the middle(used to steer)
+    if lines is None:
+      GPIO.output(26,0)
     if lines  is not None:
+      forward()
+      steer_switch = 0 #controls adjustment
+      print("forward")
       for line in lines:
         coord = line[0]   #grab line
         cv2.line(img,(coord[0],coord[1]),(coord[2],coord[3]),(255,0,255),2)
         p1,p2 = acquire_midpoint(coord[0],coord[1],coord[2],coord[3]) #obtain midpoint
         gradient = acquire_slope(coord[0],coord[1],coord[2],coord[3]) #obtain gradient
+        #print("Gradient", gradient)
         if(gradient > 0):
-            img = cv2.circle(img,(int(p1),int(p2)),10,(0,255,0),-1)
-            print(p1,"x_axis pos from right")
-            print(mid_x-p1,"distance right")
+            if(p2 < 350 and p1 > 320):
+               img = cv2.circle(img,(int(p1),int(p2)),10,(0,255,0),-1)
+               mid_dist = p1-mid_x
+               print("Green dist: ",mid_dist)
+               if(mid_dist < 250):
+                   print("adjust right")
+                   adjust_right()
+                   #forward()
         elif(gradient < 0):
-            img = cv2.circle(img,(int(p1),int(p2)),10,(255,255,255),-1)
-            print(p1,"x_axis pos from left")
-            print(mid_x-p1,"distance left")
+            if(p2 < 350 and p1 < 320):
+               img = cv2.circle(img,(int(p1),int(p2)),10,(255,255,255),-1)
+               mid_dist1 = mid_x-p1
+               print("White dist",mid_dist1)# positive values
 #------------------------------------STEERING SYSTEM--------------------------------------------------------------##
-            if(p1 > 150 and (mid_x-p1)>63):
-                print("left")
-            elif(p1 > 150 and (mid_x-p1)<63):
-                print("right")
-        else:
-            print(gradient)	
+               if(mid_dist1<220):
+                   print("adjust left",mid_dist1)
+                   adjust_left()
+                   #forward()
     return img
 #-------------------------------------------------------------------------------------------------------------------##
 #------------------------------------STEERING CONTROL SKELETON------------------------------------------------------##
+#everything will be initially set to low at the start of the loop
 def nothing(X):
-	pass
+    pass
 
 def adjust_left():
-    pass
+    GPIO.output(16,1) #set pin to high
+
+def stop_adjusting_left():
+    GPIO.output(16,0)
+def stop_adjusting_right():
+    GPIO.output(20,0) 
     
 def adjust_right():
-    pass
+    GPIO.output(20,1) #set pin to high
     
 def steer_left_by_45():
     pass
     
 def forward():
-    pass
+    GPIO.output(26,1)
+    
 def turn_round_360():
     pass
+    
 #--------------------------------------------------------------------------------------------------------------------##
 #--------------------------------------------template setup and trackbar---------------------------------------------##
 camera = PiCamera()
@@ -147,6 +170,9 @@ cv2.createTrackbar("U-V","Trackbar",240,255, nothing)
 font = cv2.FONT_HERSHEY_COMPLEX
 #-------------------------------------------------------------------------------------------------------#
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+    GPIO.output(16,0)
+    GPIO.output(20,0)
+    GPIO.output(26,0)
     # grab the raw NumPy array representing the image, then initialize the timestamp
     # and occupied/unoccupied text
     image = frame.array
@@ -163,5 +189,9 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     rawCapture.truncate(0)
     # if the `q` key was pressed, break from the loop
     if key == ord("q"):
+        GPIO.output(16,0)
+        GPIO.output(20,0)
+        #GPIO.output(21,0)
+        GPIO.cleanup()
         break
 
