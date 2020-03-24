@@ -25,12 +25,12 @@ drive_getTicks(&distLeft[0], &distRight[0]);
 print("distLeft[0] = %d, distRight[0] = %d\n", distLeft[0], distRight[0]);
 //--------------------------------------loop-----------------------------------------------//
  while (var < 7){
-v3 = adc_volts(3);  //left
-v2 = adc_volts(2);  //right
-v1 = adc_volts(1);  //turn around
+v3 = adc_volts(3);  //left 26
+v2 = adc_volts(2);  //right 20
+v1 = adc_volts(1);  //turn around 16
 v0 = adc_volts(0);  //forward
 
-if(v1 > 3.0){
+if(v1 > 3.0){ //16
   //forward
   drive_speed(0, 0); 
   drive_speed(25, 25);  
@@ -46,24 +46,22 @@ if(v1 > 3.0){
 //  drive_speed(0, -45); 
 //  drive_speed(0, 0);
 //}
-else if(v2 > 3.8){
+else if(v2 > 3.0){ //20
    //turns right at 90
    drive_speed(0, 0);                       // Turn 26 tps for 1 s
-   drive_speed(35, 0);
+   drive_speed(25, 0);
    drive_speed(0, 0);
-  pause(1000);
  } 
-else if(v3 > 3.8){
+else if(v3 > 3.0){ //26
    //turns left at 90
    drive_speed(0, 0);
-   drive_speed(0, 35);
+   drive_speed(0, 25);
    drive_speed(0, 0);
-   pause(1000);
   //---------------remaining code is to turn 90 so that it can keep 'one hand on wall'
 }    
 //drive_getTicks(&distLeft[1], &distRight[1]);
 //print("distLeft[1] = %d, distRight[1] = %d\n", distLeft[1], distRight[1]);
-//print("A/D3 = %f V%c\n", v1, CLREOL);     // Display volts
-// pause(1000);
+//print("A/D3 = %f V%c\n", v3, CLREOL);     // Display volts
+//pause(1000);
  }    
 }
