@@ -32,9 +32,9 @@ v0 = adc_volts(0);  //forward
 
 if(v1 > 3.0){ //16
   //forward
-  drive_speed(0, 0); 
+  //drive_speed(0, 0); 
   drive_speed(25, 25);  
-  drive_speed(0, 0);                     // Forward 64 tps for 2 s
+ // drive_speed(0, 0);                     // Forward 64 tps for 2 s
  // pause(1000);
 }
 //if(v0 > 3.8){
