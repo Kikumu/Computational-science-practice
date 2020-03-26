@@ -12,16 +12,12 @@
 #include "abdrive.h"                          // abdrive library
 #include "adcDCpropab.h" 
 
-
-
-
 int distLeft[4], distRight[4];
 int main()                   
 {
 adc_init(21, 20, 19, 18); 
 int var = 5;
-
-float v1,v2,v3,v0;
+float v1,v2,v3,v0,turn_around;
 drive_getTicks(&distLeft[0], &distRight[0]);
 print("distLeft[0] = %d, distRight[0] = %d\n", distLeft[0], distRight[0]);
 int count = 0;
@@ -31,47 +27,34 @@ v3 = adc_volts(3);  //left 26
 v2 = adc_volts(2);  //right 20
 v1 = adc_volts(1);  //forward 16
 v0 = adc_volts(0);  //turn around
-
-//float three = input(6);
-float fotyfive = input(12);
-
+turn_around = input(10);
 //if (count > 100)
 //{
   if(v1 > 2.0){ //16
   //forward
   //drive_speed(0, 0); 
   drive_speed(25, 25);  
- // drive_speed(0, 0);                     // Forward 64 tps for 2 s
+ // drive_speed(0, 0);                     
  // pause(1000);
 }
-//if(v0 > 3.8){
-  //turns 360
- // drive_speed(0, 0);
- // drive_speed(45, 0);                        // Turn 26 tps for 1 s
- // pause(1000);
-//  drive_speed(0, 0);
-//  drive_speed(0, -45); 
-//  drive_speed(0, 0);
-//}
-else if(v2 > 2.0){ //20
-   //turns right at 90
-   //drive_speed(0, 0);                       // Turn 26 tps for 1 s
+else if(turn_around > 0){ //21
+ //turns 360
+ drive_speed(45, 0);                       
+ drive_speed(0, 0);
+ drive_speed(0, -45); 
+}
+else if(v2 > 2.0){ //20                   
    drive_speed(25, 0);
    drive_speed(25, 25);
-   //drive_speed(0, 0);
  } 
 else if(v3 > 2.0){ //26
-   //turns left at 90
-   //drive_speed(0, 0);
    drive_speed(0, 25);
    drive_speed(25, 25);
   //---------------remaining code is to turn 90 so that it can keep 'one hand on wall'
 } 
 //  }
 count++;   
-//drive_getTicks(&distLeft[1], &distRight[1]);
-//print("distLeft[1] = %d, distRight[1] = %d\n", distLeft[1], distRight[1]);
-//print("A/D3 = %f V%c\n", v3, CLREOL);     // Display volts
+//print("A/D3 = %f V%c\n", v1, CLREOL);     // Display volts
 //pause(1000);
  }    
 }
