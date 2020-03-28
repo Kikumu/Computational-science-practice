@@ -39,9 +39,11 @@ turn_around = input(10);
 }
 else if(turn_around > 0){ //21
  //turns 360
+ //drive_speed(0, 0);
  drive_speed(45, 0);                       
- drive_speed(0, 0);
+// drive_speed(0, 0);
  drive_speed(0, -45); 
+//  drive_speed(0, 0);
 }
 else if(v2 > 2.0){ //20                   
    drive_speed(25, 0);
