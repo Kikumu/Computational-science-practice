@@ -26,37 +26,28 @@ int count = 0;
 v3 = adc_volts(3);  //left 26
 v2 = adc_volts(2);  //right 20
 v1 = adc_volts(1);  //forward 16
-v0 = adc_volts(0);  //turn around
+v0 = adc_volts(0);  //turn around 21
 turn_around = input(10);
-//if (count > 100)
-//{
-  if(v1 > 2.0){ //16
+
+if(v1 > 3.0){ //16
   //forward
-  //drive_speed(0, 0); 
   drive_speed(25, 25);  
- // drive_speed(0, 0);                     
- // pause(1000);
-}
+  }
 else if(turn_around > 0){ //21
  //turns 360
- //drive_speed(0, 0);
  drive_speed(45, 0);                       
-// drive_speed(0, 0);
  drive_speed(0, -45); 
-//  drive_speed(0, 0);
 }
-else if(v2 > 2.0){ //20                   
+else if(v2 > 3.0){ //20                   
    drive_speed(25, 0);
    drive_speed(25, 25);
  } 
-else if(v3 > 2.0){ //26
+else if(v3 > 3.0){ //26
    drive_speed(0, 25);
    drive_speed(25, 25);
-  //---------------remaining code is to turn 90 so that it can keep 'one hand on wall'
 } 
-//  }
-count++;   
-//print("A/D3 = %f V%c\n", v1, CLREOL);     // Display volts
+//---------------remaining code is to turn 90 so that it can keep 'one hand on wall'
+//print("A/D3 = %f V%c\n", turn_around, CLREOL);     // Display volts
 //pause(1000);
  }    
 }
