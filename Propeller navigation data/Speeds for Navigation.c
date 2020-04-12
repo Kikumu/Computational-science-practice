@@ -33,60 +33,38 @@ v1 = input(1);
 v2 = input(0);
 v3 = input(2);
 
-if(v1 >= 0){ //16
-//forward movement
-    switch(v1)
-   {
-     case 1:
-      drive_speed(25, 25);
-      status = 1;
-      break;
-     case 0:
-      drive_speed(0, 0);
-      status = 0;
-      break;      
-   }                    
+//forward(16)
+if(v1 ==0){
+  status = 0;
+  drive_speed(0, 0);
   }
-else if(turn_around >= 0){ //21
-//360 movement
- switch(turn_around){
-   case 1:
-    if(status==0){
-      drive_speed(45, 0);                       
-      drive_speed(0, -45);
-      }     
-      break;
-   case 0:
-    if(status == 1){drive_speed(25, 25);}
-    break;
-   }
+else if(v1 == 1){
+  status = 1;
+  drive_speed(25, 25);
+ }
+//turn_around = 21
+else if(turn_around==0)
+{
+  if(status==1){drive_speed(25, 25);}
 }
-else if(v2 >= 0){ //20
-//left
-   switch(v2)
-   {
-     case 1:
-      drive_speed(25, 0);
-      break;
-     case 0:
-      if (status == 1){drive_speed(25, 25);}
-      else if(status == 0){drive_speed(0, 0);}
-      break;      
-   }                        
- } 
-else if(v3 >= 0){ //26
-//right
-    switch(v3)
-   {
-     case 1:
-      drive_speed(0, 25);
-      break;
-     case 0:
-      if (status == 1){drive_speed(25, 25);}
-      else if(status == 0){drive_speed(0, 0);}
-      break;      
-   }                   
-} 
+else if(turn_around==1){
+  if(status==0){
+    drive_speed(45, 0);                       
+    drive_speed(0, -45);
+    }
+}
+//left(20)
+else if(v2==1){drive_speed(25, 0);}  
+else if(v2==0){
+  if (status == 1){drive_speed(25, 25);}
+  else if(status == 0){drive_speed(0, 0);}
+  }
+ //right(26)
+else if(v1==1){drive_speed(0, 25);}  
+else if(v1==0){
+  if (status == 1){drive_speed(25, 25);}
+  else if(status == 0){drive_speed(0, 0);}
+  }
 //---------------remaining code is to turn 90 so that it can keep 'one hand on wall'
 //print("A/D3 = %f V%c\n", turn_around, CLREOL);     // Display volts
  }    
