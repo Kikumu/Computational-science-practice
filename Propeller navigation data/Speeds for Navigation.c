@@ -43,28 +43,14 @@ else if(v1 == 1){
   drive_speed(25, 25);
  }
 //turn_around = 21
-else if(turn_around==0)
-{
-  if(status==1){drive_speed(25, 25);}
-}
 else if(turn_around==1){
-  if(status==0){
     drive_speed(45, 0);                       
     drive_speed(0, -45);
-    }
 }
 //left(20)
 else if(v2==1){drive_speed(25, 0);}  
-else if(v2==0){
-  if (status == 1){drive_speed(25, 25);}
-  else if(status == 0){drive_speed(0, 0);}
-  }
  //right(26)
 else if(v1==1){drive_speed(0, 25);}  
-else if(v1==0){
-  if (status == 1){drive_speed(25, 25);}
-  else if(status == 0){drive_speed(0, 0);}
-  }
 //---------------remaining code is to turn 90 so that it can keep 'one hand on wall'
 //print("A/D3 = %f V%c\n", turn_around, CLREOL);     // Display volts
  }    
